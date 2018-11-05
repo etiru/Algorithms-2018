@@ -37,6 +37,9 @@ public class JavaTasks {
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
+    //Оценка сложности алгоритма - O(n)
+    //Так - же в системе котоед не проходит тест, в проблеме я не смог разобраться, т.к. с теми значениями
+    //которые предлагает система котоед, функция работает как нужно...
     static public void sortTimes(String inputName, String outputName) {
         Scanner inputFile;
         try {
@@ -50,6 +53,8 @@ public class JavaTasks {
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
             String strLine;
 
+            // проверим каждую строчку на верный формат, и заодно разделим на часы, минуты, секунды и переведем, в
+            // число которое обозначает кол-во секунд с момента начала суток, и занесем все значения в Лист
             while ((strLine = br.readLine()) != null){
                 if(!strLine.matches("^([0-1]\\d:[0-5]\\d:[0-5]\\d)|(2[0-4]:[0-5]\\d:[0-5]\\d)$"))
                     throw new IllegalArgumentException("error Неверный формат строки");
@@ -61,14 +66,14 @@ public class JavaTasks {
         }catch (IOException e){
             System.out.println("Ошибка");
         }
-
+        // т.к. я использовал метод быстрой сортировки из класса Sorts, то нужно перевести лист в массив int
         int[] arrIntTime = new int[time.size()];
         for(int i = 0; i < arrIntTime.length; i++){
             arrIntTime[i] = time.get(i).intValue();
         }
 
         Sorts.quickSort(arrIntTime);
-
+        // Далее кол-во секунд с момента начала суток переведем в нужный формат и внесем в файл
         try {
             PrintWriter writer = new PrintWriter(outputName, String.valueOf(StandardCharsets.UTF_8));
             for (int i = 0; i < time.size(); i++){
@@ -143,6 +148,7 @@ public class JavaTasks {
      * 99.5
      * 121.3
      */
+    //Оценка сложности алгоритма - O(n)
     static public void sortTemperatures(String inputName, String outputName) {
         Scanner inputFile;
         try {
@@ -153,6 +159,7 @@ public class JavaTasks {
 
         ArrayList<Double> temp = new ArrayList<>();
 
+        // проверим каждую строчку на верный формат, и заодно каждое значение добавим в лист Double
         try{
             FileInputStream fstream = new FileInputStream(inputName);
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
@@ -168,6 +175,7 @@ public class JavaTasks {
             System.out.println("Ошибка");
         }
 
+        //переведем лист Double, в массив double, и для сортировку воспользуемся отдельным методом
         double[] tempDouble = new double[temp.size()];
 
         for (int i = 0; i < temp.size(); i++){
