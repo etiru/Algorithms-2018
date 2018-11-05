@@ -185,7 +185,7 @@ public class JavaTasks {
         }
     }
 
-    // Метод быстрой сортировки для массива double, для метода sortTemperatures.
+    // Метод быстрой сортировки для массива double, для метода sortTemperature
     private static void quickSort(double[] arr, int low, int high) {
         if (arr == null || arr.length == 0)
             return;
