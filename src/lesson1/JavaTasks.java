@@ -40,7 +40,7 @@ public class JavaTasks {
     //Оценка сложности алгоритма - O(n)
     //Так - же в системе котоед не проходит тест, в проблеме я не смог разобраться, т.к. с теми значениями
     //которые предлагает система котоед, функция работает как нужно...
-    static public void sortTimes(String inputName, String outputName) {
+     public void sortTimes(String inputName, String outputName) {
         Scanner inputFile;
         try {
             inputFile = new Scanner(new File(inputName));
@@ -76,10 +76,10 @@ public class JavaTasks {
         // Далее кол-во секунд с момента начала суток переведем в нужный формат и внесем в файл
         try {
             PrintWriter writer = new PrintWriter(outputName, String.valueOf(StandardCharsets.UTF_8));
-            for (int i = 0; i < time.size(); i++){
-                int hour = time.get(i) / 3600;
-                int minutes = (time.get(i) - hour * 3600) / 60;
-                int seconds = time.get(i) - hour * 3600 - minutes * 60;
+            for (int i = 0; i < arrIntTime.length; i++){
+                int hour = arrIntTime[i] / 3600;
+                int minutes = (arrIntTime[i] - hour * 3600) / 60;
+                int seconds = arrIntTime[i] - hour * 3600 - minutes * 60;
                 writer.println(String.format("%02d:%02d:%02d", hour, minutes, seconds));
             }
             writer.close();
