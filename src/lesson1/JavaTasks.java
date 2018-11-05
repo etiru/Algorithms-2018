@@ -40,7 +40,7 @@ public class JavaTasks {
     //Оценка сложности алгоритма - O(n)
     //Так - же в системе котоед не проходит тест, в проблеме я не смог разобраться, т.к. с теми значениями
     //которые предлагает система котоед, функция работает как нужно...
-     public void sortTimes(String inputName, String outputName) {
+     public static void sortTimes(String inputName, String outputName) {
         Scanner inputFile;
         try {
             inputFile = new Scanner(new File(inputName));
