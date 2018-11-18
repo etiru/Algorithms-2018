@@ -1,6 +1,6 @@
 package lesson3
 
-import java.util.SortedSet
+import java.util.*
 import kotlin.test.*
 
 abstract class AbstractHeadTailTest {
@@ -95,6 +95,37 @@ abstract class AbstractHeadTailTest {
 
     protected fun doSubSetTest() {
         TODO()
+    }
+
+    protected fun doRemoveTest() {
+        val rand = Random()
+
+        for (i in 0..1000) {
+            val testTree = BinaryTree<Int>()
+            testTree.add(5)
+            testTree.add(4)
+            testTree.add(6)
+
+            testTree.remove(5)
+
+            val removeSet = mutableSetOf<Int>()
+
+            val count = rand.nextInt(10000)
+
+            for (j in 1..count) {
+                val randInt = rand.nextInt(200)
+                if (randInt % 3 == 0)
+                    removeSet.add(randInt)
+
+                testTree.add(randInt)
+            }
+
+            for (node in removeSet)
+                testTree.remove(node)
+
+            for (node in removeSet)
+                assertFalse(testTree.contains(node), "${testTree.toSet()} -> $node")
+        }
     }
 
 }

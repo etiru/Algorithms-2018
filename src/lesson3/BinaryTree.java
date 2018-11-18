@@ -20,6 +20,11 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         Node(T value) {
             this.value = value;
         }
+
+        @Override
+        public String toString() {
+            return value.toString();
+        }
     }
 
     private Node<T> root = null;
@@ -60,14 +65,141 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return right == null || right.value.compareTo(node.value) > 0 && checkInvariant(right);
     }
 
+    public Node<T> findParents(T value) {
+        if (root == null)
+            return null;
+
+        return findParents(root, null, value);
+    }
+
+    private Node<T> findParents(Node<T> start, Node<T> parent, T value) {
+        int comparison = value.compareTo(start.value);
+        if (comparison == 0) {
+            return parent;
+        }
+        else if (comparison < 0) {
+            if (start.left == null) return parent;
+            return findParents(start.left, start, value);
+        }
+        else {
+            if (start.right == null) return parent;
+            return findParents(start.right, start, value);
+        }
+    }
+
+    private Set<T> toSet() {
+        Set<T> set = new HashSet<>();
+        if (root == null)
+            return set;
+
+        toSet(root, set);
+
+        return set;
+    }
+
+    private void toSet(Node<T> current, Set<T> returnSet) {
+        if (current.left != null)
+            toSet(current.left, returnSet);
+
+        returnSet.add(current.value);
+
+        if (current.right != null)
+            toSet(current.right, returnSet);
+    }
+
     /**
      * Удаление элемента в дереве
      * Средняя
      */
     @Override
     public boolean remove(Object o) {
-        // TODO
-        throw new NotImplementedError();
+        if(!contains(o)) return false;
+        @SuppressWarnings("unchecked")
+        T t = (T) o;
+        Node<T> parent = findParents(t);
+        Node<T> child = find(t);
+
+        if (child == root) {
+            Node<T> nearest;
+
+            if (child.right != null) {
+                nearest = child.right;
+                while (nearest.left != null)
+                    nearest = nearest.left;
+            }
+            else if (child.left != null) {
+                nearest = child.left;
+                while (nearest.right != null)
+                    nearest = nearest.right;
+            }
+            else {
+                root = null;
+                size = 0;
+                return true;
+            }
+
+            Node<T> newRoot = new Node<>(nearest.value);
+            if(newRoot.value.compareTo(child.value) > 0) {
+                newRoot.left = new Node<>(child.value);
+                newRoot.left.right = child.right;
+                newRoot.left.left = child.left;
+                root = newRoot;
+                Set<T> lastSet = toSet();
+
+                remove(t);
+                if (root == null)
+                    System.out.println(lastSet.toString() + " " + t);
+                root = root.left;
+            }
+            else {
+                newRoot.right = new Node<>(child.value);
+                newRoot.right.right = child.right;
+                newRoot.right.left = child.left;
+                root = newRoot;
+                remove(t);
+                root = root.right;
+            }
+            return true;
+        }
+
+        if(child.left == null && child.right == null) {
+            if (parent.value.compareTo(child.value) < 0)
+                parent.right = null;
+            else parent.left = null;
+            size--;
+            return true;
+        }
+
+        if(child.left == null || child.right == null){
+            Node<T> replace;
+            if(child.left != null)
+                replace = child.left;
+            else replace = child.right;
+
+            if (parent.value.compareTo(child.value) < 0)
+                parent.right = replace;
+            else parent.left = replace;
+            size--;
+            return true;
+        }
+
+        Node<T> step = child.right;
+        while (step.left != null)
+            step = step.left;
+
+        Node<T> nearNode = new Node<>(step.value);
+        remove(nearNode.value);
+
+        if (child.left != null && child.left.value != nearNode.value)
+            nearNode.left = child.left;
+
+        if (child.right != null && child.right.value != nearNode.value)
+            nearNode.right = child.right;
+
+        if (parent.left != null && parent.left.value.compareTo(child.value) == 0)
+            parent.left = nearNode;
+        else parent.right = nearNode;
+        return true;
     }
 
     @Override
@@ -100,29 +232,29 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
 
     public class BinaryTreeIterator implements Iterator<T> {
 
-        private Node<T> current = null;
+        private BinaryTreeIterator() {
+            list = new ArrayList<T>(toSet());
+            Collections.sort(list);
+        }
 
-        private BinaryTreeIterator() {}
+        private List<T> list;
 
+        private int index = 0;
         /**
          * Поиск следующего элемента
          * Средняя
          */
-        private Node<T> findNext() {
-            // TODO
-            throw new NotImplementedError();
-        }
-
         @Override
         public boolean hasNext() {
-            return findNext() != null;
+            return index < list.size();
         }
 
         @Override
         public T next() {
-            current = findNext();
-            if (current == null) throw new NoSuchElementException();
-            return current.value;
+            T ret = list.get(index);
+            index++;
+
+            return ret;
         }
 
         /**
@@ -131,8 +263,8 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public void remove() {
-            // TODO
-            throw new NotImplementedError();
+            index++;
+            BinaryTree.this.remove(list.get(index - 1));
         }
     }
 
