@@ -138,27 +138,18 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                 return true;
             }
 
-            Node<T> newRoot = new Node<>(nearest.value);
-            if(newRoot.value.compareTo(child.value) > 0) {
-                newRoot.left = new Node<>(child.value);
-                newRoot.left.right = child.right;
-                newRoot.left.left = child.left;
-                root = newRoot;
-                Set<T> lastSet = toSet();
+            Node<T> newNode = new Node<T>(nearest.value);
+            Node<T> subParent = findParents(nearest.value);
 
-                remove(t);
-                if (root == null)
-                    System.out.println(lastSet.toString() + " " + t);
-                root = root.left;
-            }
-            else {
-                newRoot.right = new Node<>(child.value);
-                newRoot.right.right = child.right;
-                newRoot.right.left = child.left;
-                root = newRoot;
-                remove(t);
-                root = root.right;
-            }
+            if (subParent.value.compareTo(nearest.value) > 0)
+                subParent.left = subParent.left.right;
+            else subParent.right = subParent.right.left;
+
+            newNode.right = root.right;
+            newNode.left = root.left;
+
+            root = newNode;
+            size--;
             return true;
         }
 

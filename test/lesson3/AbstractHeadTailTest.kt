@@ -1,5 +1,6 @@
 package lesson3
 
+import lesson3.BinaryTree.BinaryTreeIterator
 import java.util.*
 import kotlin.test.*
 
@@ -102,18 +103,12 @@ abstract class AbstractHeadTailTest {
 
         for (i in 0..1000) {
             val testTree = BinaryTree<Int>()
-            testTree.add(5)
-            testTree.add(4)
-            testTree.add(6)
-
-            testTree.remove(5)
-
             val removeSet = mutableSetOf<Int>()
 
-            val count = rand.nextInt(10000)
+            val count = rand.nextInt(1000)
 
             for (j in 1..count) {
-                val randInt = rand.nextInt(200)
+                val randInt = rand.nextInt()
                 if (randInt % 3 == 0)
                     removeSet.add(randInt)
 
@@ -126,6 +121,18 @@ abstract class AbstractHeadTailTest {
             for (node in removeSet)
                 assertFalse(testTree.contains(node), "${testTree.toSet()} -> $node")
         }
+    }
+
+    protected fun doNext(){
+        val testTree = BinaryTree<Int>()
+        testTree.add(1)
+        testTree.add(5)
+        testTree.add(4)
+        testTree.add(6)
+        testTree.add(8)
+        testTree.add(9)
+
+
     }
 
 }

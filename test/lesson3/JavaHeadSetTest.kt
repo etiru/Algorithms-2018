@@ -46,4 +46,10 @@ class JavaHeadSetTest : AbstractHeadTailTest() {
     fun removeTest() {
         doRemoveTest()
     }
+
+    @Test
+    @Tag("Normal")
+    fun nextTest(){
+        doNext()
+    }
 }
