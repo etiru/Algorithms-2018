@@ -239,7 +239,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         //O(nlog(n))
         @Override
         public boolean hasNext() {
-            return index < BinaryTree.this.size;
+            return index < list.size();
         }
 
         @Override
@@ -257,6 +257,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public void remove() {
+            index++;
             BinaryTree.this.remove(list.get(index - 1));
         }
     }
