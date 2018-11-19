@@ -111,6 +111,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
      * Удаление элемента в дереве
      * Средняя
      */
+    //O(n)
     @Override
     public boolean remove(Object o) {
         if(!contains(o)) return false;
@@ -235,14 +236,16 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          * Поиск следующего элемента
          * Средняя
          */
+        //O(nlog(n))
         @Override
         public boolean hasNext() {
-            return index < list.size();
+            return index < BinaryTree.this.size;
         }
 
         @Override
         public T next() {
-            T ret = list.get(index);
+            int duplicateIndex = index;
+            T ret = list.get(duplicateIndex);
             index++;
 
             return ret;
@@ -254,7 +257,6 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public void remove() {
-            index++;
             BinaryTree.this.remove(list.get(index - 1));
         }
     }
